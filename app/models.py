@@ -19,3 +19,12 @@ class DB(Base):
     published = Column(Boolean, nullable=False, server_default="True")
     created_at = Column(TIMESTAMP, nullable=False, server_default=text('now()'))
 
+
+
+class User(Base):
+    __tablename__ = 'Users'
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    email = Column(Text, nullable=False, unique=True)
+    password = Column(Text, nullable=False)
+    created_at = Column(TIMESTAMP, nullable=False, server_default=text('now()'))

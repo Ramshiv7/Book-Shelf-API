@@ -1,5 +1,6 @@
 from . import models
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
+
 
 
 class PostBase(BaseModel):
@@ -24,3 +25,15 @@ class ReturnPostModel(PostBase):
     published : bool 
 
     
+
+class UserCreate(BaseModel):
+    email : EmailStr
+    password : str 
+
+
+class UserReturn(BaseModel):
+    id : int
+    email: EmailStr
+
+    class Config:
+        orm_mode = True

@@ -51,3 +51,12 @@ async def delete_post(id: int, db: Session = Depends(get_db)):
     db.commit()
     return "deleted the post ID "
 
+
+# Create User for DB Model - User
+@app.post('/user', response_model= schemas.UserReturn)
+async def create_user(user_details: schemas.UserCreate,db: Session = Depends(get_db)):
+    user_data = models.User(**user_details.dict())
+    db.add(user_data)
+    db.commit()
+    db.refresh(user_data)
+    return user_data
