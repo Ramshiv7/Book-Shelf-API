@@ -7,7 +7,7 @@ from typing import List
 
 
 
-router = APIRouter(prefix='/users')
+router = APIRouter(prefix='/users', tags=['Users'])
 
 # Create User for DB Model - User
 @router.post('/', response_model= schemas.UserReturn)

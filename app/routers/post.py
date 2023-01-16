@@ -8,7 +8,8 @@ from typing import List
 
 
 router = APIRouter(
-    prefix="/posts"
+    prefix="/posts",
+    tags=['Posts']
 )
 
 @router.get('/', response_model = List[schemas.PostBase])
