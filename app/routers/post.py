@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from .. import schemas, models, utils
 from ..database import get_db
 from typing import List
+from .. import oauth2
 
 
 router = APIRouter(
@@ -26,7 +27,8 @@ async def get_post_by_id(id: int,db: Session = Depends(get_db)):
 
 
 @router.post('/')
-async def create_post(new_data: schemas.CreatePost, db : Session = Depends(get_db)):
+# async def create_post(new_data: schemas.CreatePost, db : Session = Depends(get_db)):
+async def create_post(new_data: schemas.CreatePost, db : Session = Depends(get_db), get_current_user: int = Depends(oauth2.get_current_user)):
     data_insert = models.DB(**new_data.dict())
     db.add(data_insert)
     db.commit()
