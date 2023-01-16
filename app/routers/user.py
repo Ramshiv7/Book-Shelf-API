@@ -7,10 +7,10 @@ from typing import List
 
 
 
-router = APIRouter()
+router = APIRouter(prefix='/users')
 
 # Create User for DB Model - User
-@router.post('/user', response_model= schemas.UserReturn)
+@router.post('/', response_model= schemas.UserReturn)
 async def create_user(user_details: schemas.UserCreate,db: Session = Depends(get_db)):
     # hashed_pwd = pwd_context.hash(user_details.email)
     # Hashing the Password 
@@ -23,7 +23,7 @@ async def create_user(user_details: schemas.UserCreate,db: Session = Depends(get
     return user_data
 
 
-@router.get('/users/{id}', response_model= schemas.UserReturn)
+@router.get('/{id}', response_model= schemas.UserReturn)
 async def get_user(id: int, db: Session = Depends(get_db)):
     user_data = db.query(models.User).filter(models.User.id == id).first()
 

@@ -7,22 +7,24 @@ from ..database import get_db
 from typing import List
 
 
-router = APIRouter()
+router = APIRouter(
+    prefix="/posts"
+)
 
-@router.get('/post', response_model = List[schemas.PostBase])
+@router.get('/', response_model = List[schemas.PostBase])
 async def get_all_post(db: Session = Depends(get_db)):
     return_data = db.query(models.DB).all()
     #return_data = db.query(models.PupHub).all()
     return return_data
 
 
-@router.get('/post/{id}')
+@router.get('/{id}')
 async def get_post_by_id(id: int,db: Session = Depends(get_db)):
     books_by_id = db.query(models.DB).filter(models.DB.id == id).all()
     return  books_by_id
 
 
-@router.post('/post')
+@router.post('/')
 async def create_post(new_data: schemas.CreatePost, db : Session = Depends(get_db)):
     data_insert = models.DB(**new_data.dict())
     db.add(data_insert)
@@ -31,7 +33,7 @@ async def create_post(new_data: schemas.CreatePost, db : Session = Depends(get_d
     return data_insert
 
 
-@router.put('/post/{id}')
+@router.put('/{id}')
 async def update_post(id: int,upd_data: schemas.UpdatePost, db: Session = Depends(get_db)):
     print(id, upd_data.dict())
     update_q = db.query(models.DB).filter(models.DB.id == id)
@@ -40,7 +42,7 @@ async def update_post(id: int,upd_data: schemas.UpdatePost, db: Session = Depend
     db.commit()
     return update_q.first()
 
-@router.delete('/post/{id}')
+@router.delete('/{id}')
 async def delete_post(id: int, db: Session = Depends(get_db)):
     del_data = db.query(models.DB).filter(models.DB.id == id)
 
