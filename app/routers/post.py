@@ -21,7 +21,7 @@ async def get_all_post(db: Session = Depends(get_db)):
 
 
 @router.get('/{id}')
-async def get_post_by_id(id: int,db: Session = Depends(get_db)):
+async def get_post_by_id(id: int,db: Session = Depends(get_db), user_id: int = Depends(oauth2.get_current_user)):
     books_by_id = db.query(models.DB).filter(models.DB.id == id).all()
     return  books_by_id
 
@@ -37,7 +37,7 @@ async def create_post(new_data: schemas.CreatePost, db : Session = Depends(get_d
 
 
 @router.put('/{id}')
-async def update_post(id: int,upd_data: schemas.UpdatePost, db: Session = Depends(get_db)):
+async def update_post(id: int,upd_data: schemas.UpdatePost, db: Session = Depends(get_db),user_id: int = Depends(oauth2.get_current_user)):
     print(id, upd_data.dict())
     update_q = db.query(models.DB).filter(models.DB.id == id)
     update_query = update_q.first()
@@ -46,7 +46,7 @@ async def update_post(id: int,upd_data: schemas.UpdatePost, db: Session = Depend
     return update_q.first()
 
 @router.delete('/{id}')
-async def delete_post(id: int, db: Session = Depends(get_db)):
+async def delete_post(id: int, db: Session = Depends(get_db),user_id: int = Depends(oauth2.get_current_user)):
     del_data = db.query(models.DB).filter(models.DB.id == id)
 
     del_data.delete(synchronize_session=False)
