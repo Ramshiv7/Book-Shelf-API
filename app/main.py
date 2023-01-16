@@ -4,6 +4,10 @@ from .database import get_db
 from sqlalchemy.orm import Session
 from . import schemas
 from typing import List
+from passlib.context import CryptContext
+
+
+pwd_context = CryptContext(schemes=['bcrypt'], deprecated="auto")
 
 
 app = FastAPI()
@@ -55,6 +59,8 @@ async def delete_post(id: int, db: Session = Depends(get_db)):
 # Create User for DB Model - User
 @app.post('/user', response_model= schemas.UserReturn)
 async def create_user(user_details: schemas.UserCreate,db: Session = Depends(get_db)):
+    hashed_pwd = pwd_context.hash(user_details.email) # Hashing the Password 
+    user_details.password = hashed_pwd  # Replace Normal Password With Hashed Password
     user_data = models.User(**user_details.dict())
     db.add(user_data)
     db.commit()
